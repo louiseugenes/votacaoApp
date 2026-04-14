@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Votação em Tempo Real</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; margin: 40px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; text-align: center; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #3498db; color: white; }
+        .votos-badge { background-color: #27ae60; color: white; padding: 5px 10px; border-radius: 15px; font-weight: bold; }
+        .btn-votar {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-votar:hover { background-color: #2980b9; }
+    </style>
+
+</head>
+<body>
+
+<div class="container">
+    <h1 th:text="${msg}">Painel de Votação</h1>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Candidato</th>
+            <th style="text-align: center;">Votos Atuais</th>
+            <th style="text-align: center;">Acção</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Iteramos sobre o Map que está no Controller -->
+        <tr th:each="entry : ${votosCandidatos}">
+
+            <td th:text="${entry.key}">Nome do Candidato</td>
+
+            <td style="text-align: center;">
+                <span class="votos-badge" th:text="${entry.value}">0</span>
+            </td>
+
+            <td style="text-align: center;">
+                <!-- Criamos um formulário POST para cada linha -->
+                <form th:action="@{/votar}" method="post">
+                    <!-- Enviamos o nome do candidato como um parâmetro oculto -->
+                    <input type="hidden" name="candidato" th:value="${entry.key}" />
+                    <button type="submit" class="btn-votar">Votar</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
